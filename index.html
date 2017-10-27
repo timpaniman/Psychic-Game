@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="UTF-8">
+    <title>The Psychic Game</title>
+    <link rel="stylesheet" href="assets/css/reset.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="assets/javascript/game.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+
+    <div class="jumbotron">
+        <h1 class="text-center">The Psychic Game</h1>
+    </div>
+    <img src="assets/images/psychic.jpg">
+    <div id="game">
+        <h2>Guess what letter I am thinking of</h2>
+
+        <p>wins: </p>
+        <p>losses: </p>
+        <p>Guesses left: </p>
+        <p>Your Guesses so far: </p>
+    </div>
+
+    <script type="text/javascript">
+        var computerChoices = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r",
+            "s", "t", "u", "v", "w", "x", "y", "z"
+        ];
+        var wins = 0;
+        var losses = 0;
+        var guessesLeft = 9;
+        var gameOver = false;
+        var computerGuessIndex = Math.floor(Math.random() * computerChoices.length);
+        var computerGuess = computerChoices[computerGuessIndex];
+        var guesses = "";
+
+        // This function is run whenever the user presses a key.
+        document.onkeyup = function(event) {
+
+            // Determines which key was pressed.
+            var userGuess = event.key;
+
+            // var gameOver = false;
+            // Reworked our code from last step to use "else if" instead of lots of if statements.
+            if (gameOver) {
+                computerGuessIndex = Math.floor(Math.random() * computerChoices.length);
+                computerGuess = computerChoices[computerGuessIndex];
+            }
+
+            if (isLetter(userGuess)) {
+                var matched = (userGuess == computerGuess);
+
+                if (guessesLeft > 1) {
+                    if (matched) {
+                        gameOver = true;
+                        guesses = "";
+                        wins++;
+                        guessesLeft = 9;
+                        matched = false;
+
+                        // Set the inner HTML contents of the #game div to our html string
+                        printdoc(wins, losses, guessesLeft, guesses);
+                    } else {
+                        guessesLeft--;
+                        guesses = guesses + '  ' + userGuess;
+                        gameOver = false;
+                    }
+                } else { //no more guess left,, so lose
+                    gameOver = true;
+                    guesses = "";
+                    losses++;
+                    guessesLeft = 9;
+                    matched = false;
+                    // Set the inner HTML contents of the #game div to our html string
+                    printdoc(wins, losses, guessesLeft, guesses);
+                }
+
+
+                printdoc(wins, losses, guessesLeft, guesses);
+            }
+        };
+    </script>
+
+
+
+</body>
+
+</html>
